@@ -10,7 +10,6 @@ executa movimentos diferentes a cada run
 #include <iostream>
 #include "libs/EdubotLib.hpp"
 
-
 using namespace std;
  
 bool detecta_colisao(EdubotLib* edubotLib){
@@ -25,12 +24,14 @@ void verifica_parede_esquerda(EdubotLib* edubotLib){
 	     edubotLib->sleepMilliseconds(1000);
 	     edubotLib->stop();
 
+		//no caso de uma quina
 	     if(detecta_colisao(edubotLib)){
 			return;
 		}
 	}
 }
 
+//vai um pouco pra tras
 void ir_1_para_tras(EdubotLib* edubotLib){
 	edubotLib->stop();
 	edubotLib->sleepMilliseconds(1000);
@@ -40,6 +41,7 @@ void ir_1_para_tras(EdubotLib* edubotLib){
 	edubotLib->stop();
 }
 
+//vai um pouco pra frente
 void ir_1_para_frente(EdubotLib* edubotLib){
 	cout << "VAI PRA FRENTE" << endl;
 	edubotLib->move(0.19);
@@ -59,19 +61,6 @@ void gira_esquerda(EdubotLib* edubotLib){
 }
 
 
-float getSonarFiltrado(EdubotLib* edubotLib, int sensorId, int numLeituras = 10) {
-    float soma = 0;
-    for (int i = 0; i < numLeituras; ++i) {
-        soma += edubotLib->getSonar(sensorId);
-        edubotLib->sleepMilliseconds(10);  // Pequeno atraso entre leituras
-    }
-    return soma / numLeituras;
-}
-
-
-
-
-
 int main(){
 
 	EdubotLib *edubotLib = new EdubotLib();
@@ -79,7 +68,8 @@ int main(){
 	if(edubotLib->connect()){
 		edubotLib->sleepMilliseconds(300);
 
-		//encontrar parede a seguir
+		//movimento inicial
+		//encontra parede a seguir
 		while(!detecta_colisao(edubotLib)){
 			edubotLib->move(0.2);
 	          edubotLib->sleepMilliseconds(1000);
@@ -98,30 +88,35 @@ int main(){
 			if(detecta_colisao(edubotLib)){
 				cout << "PAREDE A FRENTE" << endl;
 				
-				if(getSonarFiltrado(edubotLib, 0) <= 0.3){
+				if(edubotLib->getSonar(0) <= 0.3){ //se a parede está perto
 					cout << "ESSEEEEEEEEEEEEEEEE" << endl;
+					ir_1_para_tras(edubotLib);
+					gira_direita(edubotLib);
+					
+					/*
 					edubotLib->stop();
 					edubotLib->sleepMilliseconds(1000);
 					edubotLib->move(-0.07);  
 					edubotLib->sleepMilliseconds(800);
 					edubotLib->stop();
 					gira_direita(edubotLib);
+					*/
 				}
-				else{
+				else{ 
 					ir_1_para_tras(edubotLib);
 					gira_direita(edubotLib);
 				}
 			}
 
-			//se o caminho estiver livre a esquerda, virar a esquerda
-			if(getSonarFiltrado(edubotLib, 0) > 0.4){
+			//se ultrapassou a parede
+			if(edubotLib->getSonar(0) > 0.4){ 
 				gira_esquerda(edubotLib);
 				ir_1_para_frente(edubotLib);
 			}
 
 
 
-//edubotLib->getSonar(0)
+
 
 
 
