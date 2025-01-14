@@ -2,7 +2,6 @@
  versao 1 trabalho edubot
  algoritmo seguidor de parede
 
-
 //<<endl; é quebra de linha
 
 */
@@ -24,11 +23,11 @@ void verifica_parede_esquerda(EdubotLib* edubotLib){
 	     edubotLib->stop();
 	     cout << "PAREDE A ESQUERDA" << endl;
 
+		//caso de quina
 	     if(detecta_colisao(edubotLib)){
 			return;
 		}
 	}
-
 }
 
 void ir_1_para_tras(EdubotLib* edubotLib){
@@ -65,7 +64,7 @@ void gira_direita_ou_esquerda(EdubotLib* edubotLib){
 }
 
 int main(){
-
+	
 	EdubotLib *edubotLib = new EdubotLib();
 
 	if(edubotLib->connect()){
@@ -78,25 +77,24 @@ int main(){
                edubotLib->sleepMilliseconds(1000);
 		}
 
-
 	
 		//teve colisao
 		ir_1_para_tras(edubotLib);
 
-	  //segue parede
-	  verifica_parede_esquerda(edubotLib);
+		//segue parede
+		verifica_parede_esquerda(edubotLib);
 	     
-
 		//vai um pouco pra frente
 		ir_1_para_frente(edubotLib);
 
-		
-		gira_direita_ou_esquerda(edubotLib);
+	
+		gira_direita_ou_esquerda(edubotLib); //ARRUMAR
 
 
 		verifica_parede_esquerda(edubotLib);
 
 		if(detecta_colisao(edubotLib)){
+			//valores diferentes da funcao ir para tras
 			edubotLib->stop();
 			edubotLib->sleepMilliseconds(1000);
 			cout << "PAREDE A FRENTE" << endl;
@@ -119,14 +117,11 @@ int main(){
 
 
 
-		}
+		
 		edubotLib->disconnect();
 	}
 	else{
-		//std::
-		cout << "NAO CONECTADO" << //std::
-		endl; 
+		cout << "NAO CONECTADO" << endl; 
 	}
-
 	return 0;
 }
